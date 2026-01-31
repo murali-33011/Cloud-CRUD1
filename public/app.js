@@ -27,6 +27,21 @@ async function loadTasks() {
   });
 }
 
+async function addTask() {
+  const input = document.getElementById("taskInput");
+  const taskName = input.value.trim();
+  if (!taskName) return;
+
+  await fetch("/api/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: taskName })
+  });
+
+  input.value = "";
+  loadTasks();
+}
+
 async function updateTask(index, currentName) {
   const newName = prompt("Edit task:", currentName);
   if (!newName) return;
@@ -41,10 +56,7 @@ async function updateTask(index, currentName) {
 }
 
 async function deleteTask(index) {
-  await fetch(`/api/tasks/${index}`, {
-    method: "DELETE"
-  });
-
+  await fetch(`/api/tasks/${index}`, { method: "DELETE" });
   loadTasks();
 }
 
